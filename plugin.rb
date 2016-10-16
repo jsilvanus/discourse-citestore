@@ -1,6 +1,6 @@
 # name: Citestore
 # about: Store citations and quote them with shorthand.
-# version: 0.0.4
+# version: 0.0.5
 # authors: Juha Leinonen (jsilvanus)
 # url: https://github.com/jsilvanus/discourse-citestore
 

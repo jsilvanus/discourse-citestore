@@ -12,7 +12,7 @@ that are frequently cited in discussions.
 
 # Basic features
  - [x] Basic functionality for adding and retrieving data from storage
- - [ ] Advanced functionality for adding and retrieving data from storage (routes)
+ - [x] Advanced functionality for adding and retrieving data from storage (routes)
  - [ ] Replace shorthands
  - [ ] Enable Admin GUI for adding data into storage
 
