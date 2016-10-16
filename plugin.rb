@@ -219,6 +219,21 @@ after_initialize do
         render_json_error e.message
       end
     end
+
+    def default
+      user_id = current_user.id
+
+      begin
+        Citestore::Storage.create(user_id, "test")
+        Citestore::Storage.add(user_id, "test", "1", "Lorem ipsum...")
+        Citestore::Storage.add(user_id, "test", "2", "...dolor sit amet.")
+        record = Citestore::Storage.whole(user_id, "test")
+        render json: record
+      rescue StandardError => e
+        render_json_error e.message
+      end
+    end
+
   end
 
   # Routes
@@ -227,6 +242,9 @@ after_initialize do
     put "/" => "citestore#get"
     post "/" => "citestore#add"
     delete "/" => "citestore#remove"
+
+    post "/default" => "citestore#default"
+    get "/default" => "citestore#default"
 
     get "/storage" => "citestore#all"
     post "/storage" => "citestore#create"
