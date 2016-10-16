@@ -1,0 +1,11 @@
+en:
+  site_settings:
+    citestore_enabled: 'Enable citation storage?'
+  citestore:
+    already_exists: "Storage exists already."
+    missing_handle: "Invalid or missing handle"
+    missing_locus: "Invalid or missing locus"
+    missing_content: "Invalid or missing content"
+    missing_store: "Invalid storage"
+    must_be_staff: "To use this plugin you must be a member of staff or admin"
+

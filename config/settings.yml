@@ -1,0 +1,5 @@
+plugins:
+  citestore_enabled:
+    default: true
+    client: true
+
