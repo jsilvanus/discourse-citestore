@@ -1,6 +1,6 @@
 # name: Citestore
 # about: Store citations and quote them with shorthand.
-# version: 0.0.2
+# version: 0.0.3
 # authors: Juha Leinonen (jsilvanus)
 # url: https://github.com/jsilvanus/discourse-citestore
 
@@ -109,8 +109,19 @@ after_initialize do
 
         storage = PluginStore.get(PLUGIN_NAME, handle)
         storage[locus] = contents
+        PluginStore.set(PLUGIN_NAME, handle, storage)
 
         contents
+      end
+
+      def remove(user_id, handle, locus)
+        ensureStaff user_id
+
+        if has(handle, locus)
+          storage = PluginStore.get(PLUGIN_NAME, handle)
+          storage.delete(locus)
+          PluginStore.set(PLUGIN_NAME, handle, storage)
+        end
       end
 
       # Ensure staff id
@@ -125,5 +136,105 @@ after_initialize do
     end
   end
 
-  # Continue here...
+  # Functionality, part 2
+  require_dependency "application_controller"
+
+  class Citestore::CitestoreController < ::ApplicationController
+    requires_plugin PLUGIN_NAME
+
+    before_filter :ensure_logged_in
+
+    # Storage creations
+    def create
+      handle   = params.require(:handle)
+      user_id  = current_user.id
+
+      begin
+        record = Citestore::Storage.create(user_id, handle)
+        render json: record
+      rescue StandardError => e
+        render_json_error e.message
+      end
+    end
+
+    def delete
+      handle = params.require(:handle)
+      user_id  = current_user.id
+
+      begin
+        record = Citestore::Storage.delete(user_id, handle)
+        render json: record
+      rescue StandardError => e
+        render_json_error e.message
+      end
+    end
+
+    def all
+      user_id  = current_user.id
+
+      begin
+        record = Citestore::Storage.all(user_id)
+        render json: record
+      rescue StandardError => e
+        render_json_error e.message
+      end
+    end
+
+    # Loci
+    def whole
+      handle = params.require(:handle)
+      user_id  = current_user.id
+
+      begin
+        record = Citestore::Storage.whole(user_id, handle)
+        render json: record
+      rescue StandardError => e
+        render_json_error e.message
+      end
+    end
+
+    def add
+      handle = params.require(:handle)
+      locus = params.require(:locus)
+      content = params.require(:content)
+      user_id = current_user.id
+
+      begin
+        record = Citestore::Storage.add(user_id, handle, locus, content)
+        render json: record
+      rescue StandardError => e
+        render_json_error e.message
+      end
+    end
+
+    def get
+      handle = params.require(:handle)
+      locus = params.require(:locus)
+      user_id = current_user.id
+
+      begin
+        record = Citestore::Storage.get(user_id, handle, locus)
+        render json: record
+      rescue StandardError => e
+        render_json_error e.message
+      end
+    end
+  end
+
+  # Routes
+  Citestore::Engine.routes.draw do
+    get "/" => "citestore#whole"
+    put "/" => "citestore#get"
+    post "/" => "citestore#add"
+    delete "/" => "citestore#remove"
+
+    get "/storage" => "citestore#all"
+    post "/storage" => "citestore#create"
+    delete "/storage" => "citestore#delete"
+  end
+
+  Discourse::Application.routes.append do
+    mount ::Citestore::Engine, at: "/citestore"
+  end
+
 end
