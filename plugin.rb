@@ -8,6 +8,7 @@ enabled_site_setting :citestore_enabled
 
 PLUGIN_NAME ||= "citestore".freeze
 STORE_NAME ||= "citestorage".freeze
+DISALLOWED_STORES ||= [ "default", "storage" ].freeze
 
 after_initialize do
 
@@ -43,7 +44,7 @@ after_initialize do
 
         storage = all(user_id)
 
-        raise StandardError.new "citestore.disallowed_name" if ["defaults", "storage"].include?(handle)
+        raise StandardError.new "citestore.disallowed_name" if DISALLOWED_STORES.include?(handle)
         raise StandardError.new "citestore.already_exists" if storage.include?(handle)
 
         storage << handle
