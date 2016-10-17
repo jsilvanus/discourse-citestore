@@ -3,6 +3,7 @@ en:
     citestore_enabled: 'Enable citation storage?'
   citestore:
     already_exists: "Storage exists already."
+    disallowed_name: "Invalid handle (defaults, storage taken)"
     missing_handle: "Invalid or missing handle"
     missing_locus: "Invalid or missing locus"
     missing_content: "Invalid or missing content"

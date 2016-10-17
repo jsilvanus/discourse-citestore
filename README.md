@@ -13,8 +13,11 @@ that are frequently cited in discussions.
 # Basic features
  - [x] Basic functionality for adding and retrieving data from storage
  - [x] Advanced functionality for adding and retrieving data from storage (routes)
- - [ ] Replace shorthands
+ - [x] Replace shorthands
+ - [ ] Rigorous testing, after which we result in 0.1
+
  - [ ] Enable Admin GUI for adding data into storage
+ - [ ] Rigorous testing, after which we result in 1.0
 
 # Terminology
  - shorthand: the entire code for a citation, e.g. `[us-constitution 1]`

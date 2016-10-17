@@ -1,6 +1,6 @@
 # name: Citestore
 # about: Store citations and quote them with shorthand.
-# version: 0.0.5
+# version: 0.0.6
 # authors: Juha Leinonen (jsilvanus)
 # url: https://github.com/jsilvanus/discourse-citestore
 
@@ -42,6 +42,8 @@ after_initialize do
         raise StandardError.new "citestore.missing_handle" if handle.blank?
 
         storage = all(user_id)
+
+        raise StandardError.new "citestore.disallowed_name" if ["defaults", "storage"].include?(handle)
         raise StandardError.new "citestore.already_exists" if storage.include?(handle)
 
         storage << handle
@@ -237,9 +239,11 @@ after_initialize do
   end
 
   # Routes
+
   Citestore::Engine.routes.draw do
-    get "/" => "citestore#whole"
-    put "/" => "citestore#get"
+    put "/" => "citestore#whole"
+    get "/" => "citestore#get"
+#    get "/:handle/:locus", to: 'citestore#get'
     post "/" => "citestore#add"
     delete "/" => "citestore#remove"
 
